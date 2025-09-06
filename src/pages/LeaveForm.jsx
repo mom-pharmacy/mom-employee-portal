@@ -6,7 +6,6 @@ import PostLeaves from "../components/PostLeaves";
 import toast from "react-hot-toast";
 
 const LeaveForm = () => {
-
   const [formData, setFormData] = useState({
     reason: "",
     from: "",
@@ -14,10 +13,11 @@ const LeaveForm = () => {
     leaveType: "",
   });
 
-  const [fieldError , setFieldError] = useState(false)
+  const today = new Date().toISOString().split("T")[0];
 
-  const {jwtToken} = useContext(UserContext)
+  const [fieldError, setFieldError] = useState(false);
 
+  const { jwtToken } = useContext(UserContext);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -28,48 +28,42 @@ const LeaveForm = () => {
   }
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    console.log("Form Data:", formData)
-    console.log(jwtToken)
-    const userDetails = jwtDecode(jwtToken)
-    console.log("from the handle submit button",userDetails)
-    const valuesOfFormData = Object.values(formData).some(item=>item==='')
-    if(valuesOfFormData){
-      setFieldError(true)
-    }else{
-      setFieldError(false)
-       const apiurl =` ${import.meta.env.VITE_BACKEND_URL}/api/leave/apply`
-
-    const options = {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-        "content-type": "application/json",
-        
-      },
-      body: JSON.stringify({
-        name: userDetails.username,
-        employeeId: userDetails.userId,
-        email:userDetails.email,
-        ...formData,
-      }),
-    };
-    const response = await fetch(apiurl, options);
-
-    if (response.ok) {
-      console.log("Successfully posted data to backend");
-      toast.success("submited successfully")
+    e.preventDefault();
+    console.log("Form Data:", formData);
+    console.log(jwtToken);
+    const userDetails = jwtDecode(jwtToken);
+    console.log(userDetails);
+    const valuesOfFormData = Object.values(formData).some(
+      (item) => item === ""
+    );
+    if (valuesOfFormData) {
+      setFieldError(true);
     } else {
-      console.log("Unable to post data to backend");
-      toast.error("Unable to post data to backend")
+      setFieldError(false);
+      const apiurl = ` ${import.meta.env.VITE_BACKEND_URL}/api/leave/apply`;
+
+      const options = {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer${jwtToken}`,
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          name: userDetails.username,
+          employeeId: userDetails.userId,
+          ...formData,
+        }),
+      };
+      const response = await fetch(apiurl, options);
+
+      if (response.ok) {
+        console.log("Successfully posted data to backend");
+        toast.success("submitted");
+      } else {
+        console.log("Unable to post data to backend");
+      }
     }
-
-    }
-
-  }
-   
-  
-
+  };
 
   return (
     <>
@@ -90,6 +84,7 @@ const LeaveForm = () => {
                   value={formData.from}
                   onChange={handleChange}
                   className="border rounded-lg p-2 "
+                  min={today}
                 />
               </div>
 
@@ -100,6 +95,7 @@ const LeaveForm = () => {
                   name="to"
                   value={formData.to}
                   onChange={handleChange}
+                  min={formData.from || today}
                   className="border rounded-lg p-2 "
                 />
               </div>
@@ -118,25 +114,25 @@ const LeaveForm = () => {
             </select>
 
             <textarea
-            placeholder="Reason"
-            name="reason"
-            value={formData.reason}
-            onChange={handleChange}
-            className="border rounded-lg p-3  h-24 "
-          />
-          {fieldError && <p className='text-red-400'>All fields are mandatory</p>}
-          <button
-            type="submit"
-            className="bg-[#00a99d] text-white py-3 rounded-lg font-semibold  hover:bg-[#2a9992] "
-          >
-            Submit
-          </button>
-        </form>
-
-      </div>
+              placeholder="Reason"
+              name="reason"
+              value={formData.reason}
+              onChange={handleChange}
+              className="border rounded-lg p-3  h-24 "
+            />
+            {fieldError && (
+              <p className="text-red-400">All fields are mandatory</p>
+            )}
+            <button
+              type="submit"
+              className="bg-[#00a99d] text-white py-3 rounded-lg font-semibold  hover:bg-[#2a9992] "
+            >
+              Submit
+            </button>
+          </form>
         </div>
-              <PostLeaves />
-
+      </div>
+      <PostLeaves />
     </>
   );
 };
