@@ -13,6 +13,7 @@ const LeaveForm = () => {
     to: "",
     leaveType: "",
   });
+  const today = new Date().toISOString().split("T")[0];
 
   const [fieldError , setFieldError] = useState(false)
 
@@ -58,7 +59,8 @@ const LeaveForm = () => {
 
     if (response.ok) {
       console.log("Successfully posted data to backend");
-      toast.success("submited successfully")
+            toast.success("submited successfully")
+
     } else {
       console.log("Unable to post data to backend");
       toast.error("Unable to post data to backend")
@@ -89,6 +91,7 @@ const LeaveForm = () => {
                   name="from"
                   value={formData.from}
                   onChange={handleChange}
+                  min={today}
                   className="border rounded-lg p-2 "
                 />
               </div>
@@ -100,6 +103,7 @@ const LeaveForm = () => {
                   name="to"
                   value={formData.to}
                   onChange={handleChange}
+                  min={formData.from || today}
                   className="border rounded-lg p-2 "
                 />
               </div>

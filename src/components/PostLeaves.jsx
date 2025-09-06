@@ -51,7 +51,7 @@ function Mangemployee() {
             setTotalPages(Math.ceil(data.leaves.length/limit))
         }catch(error){
             console.log(error)
-            toast.success("Submited Successfuly")        }
+                   }
     }
 
     getLeaves()

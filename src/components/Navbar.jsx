@@ -30,8 +30,9 @@ const Navbar = ({search, setSearch}) => {
       <div className='p-4 px-6 flex  justify-between bg-[#00a99d]'>
         <h1 className='font-bold text-white'>MOM Pharmcay Employment Portal</h1>
         <div className='flex items-center'>
-          <div className='flex mr-4' onClick={toLeaveForm}>Apply for leave</div>
-            <div className='flex mr-4'>
+<button className='flex mr-4 bg-[#ffffffcc] px-4 py-1 rounded-md hover:text-[white]  hover:bg-amber-400' onClick={toLeaveForm}>Apply for leave
+
+          </button>            <div className='flex mr-4'>
             <FaUserCircle className='text-2xl' /> <span className='ml-2 text-black font-bold'>{user && user.username}</span>
             </div>
             <button className='bg-red-400 px-4 py-1 rounded-md' onClick={()=>logout()}>Logout</button>
